@@ -22,25 +22,36 @@ conda activate anomaly-detector
 pip install -r requirements.txt
 ```
 
-### 3. Add Your Files
-Put your data files in the `data/` folder:
+### 3. Prepare Your Data Files
+
+You have **two options** for organizing your files:
+
+#### Option A: Use the data folder (recommended)
 ```bash
-# Copy your files to the data folder
+# Create the data folder
+mkdir data
+
+# Copy your files there
 cp /path/to/your/training_data.csv data/
 cp /path/to/your/test_data.xlsx data/
 ```
 
+#### Option B: Keep files anywhere
+Keep your CSV and XLSX files wherever they are - you can specify full paths when running the tool.
+
 ### 4. Run the Analysis
 ```bash
-# Simple run - it will ask you to pick files
+# Interactive mode - will ask you to select files
 python src/main.py
 ```
 
-That's it! The tool will:
-- ✅ Let you select your CSV and XLSX files
-- ✅ Train a model on your CSV patterns  
-- ✅ Compare every row in your XLSX file
-- ✅ Generate detailed reports of all differences found
+**If using Option A (data folder):**
+- The tool will automatically find files in the `data/` folder
+- Just select from the numbered list
+
+**If using Option B (files anywhere):**
+- Choose "Enter custom path" when prompted
+- Type the full path like: `/Users/yourname/Documents/my_data.csv`
 
 ## 📁 What You Get
 
@@ -57,18 +68,32 @@ After running, check the `reports/` folder for:
 conda activate anomaly-detector
 python src/main.py
 ```
-Then follow the prompts to select your files.
+The tool will show you available files and let you pick them.
 
 ### Command Line Mode
 ```bash
-# Specify files directly
+# If files are in data folder
 python src/main.py --csv data/training.csv --xlsx data/test.xlsx
+
+# If files are anywhere else
+python src/main.py --csv /full/path/to/training.csv --xlsx /full/path/to/test.xlsx
 
 # Force retrain the model
 python src/main.py --csv data/training.csv --xlsx data/test.xlsx --retrain
 
 # Custom output folder
 python src/main.py --csv data/training.csv --xlsx data/test.xlsx --output my_reports/
+```
+
+## 📂 Project Structure
+```
+csv-xlsx-anomaly-detector/
+├── src/                    # Python code files
+├── data/                   # Put your CSV/XLSX files here (optional)
+├── models/                 # Trained models saved here
+├── reports/                # Generated reports appear here
+├── requirements.txt        # Dependencies
+└── README.md              # This file
 ```
 
 ## 🔍 What It Detects
@@ -98,9 +123,19 @@ The tool finds several types of differences:
 
 ## 🛠 Troubleshooting
 
+### "No CSV/XLSX files found in data/"
+- **Solution 1:** Put your files in the `data/` folder
+- **Solution 2:** Use custom paths when prompted or use command line mode
+
 ### "No matching columns found"
 - Make sure your CSV and XLSX have some column names in common
 - Column names are case-sensitive
+- Check that both files have headers in the first row
+
+### "File not found"
+- Double-check your file paths
+- Make sure file extensions are correct (.csv, .xlsx, .xls)
+- Use full paths if files are outside the project folder
 
 ### "No differences found"
 - Your data matches perfectly! 🎉
@@ -117,9 +152,10 @@ The tool finds several types of differences:
 ## 🔄 Workflow Tips
 
 1. **Start small** - Test with a subset of your data first
-2. **Check column alignment** - Make sure CSV and XLSX have matching column names  
-3. **Review high severity first** - Focus on the most critical differences
-4. **Retrain when needed** - Use `--retrain` if your data patterns change
+2. **Use the data folder** - Keeps everything organized
+3. **Check column alignment** - Make sure CSV and XLSX have matching column names  
+4. **Review high severity first** - Focus on the most critical differences
+5. **Retrain when needed** - Use `--retrain` if your data patterns change
 
 ## 📋 Requirements
 
